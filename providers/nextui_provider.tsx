@@ -20,9 +20,9 @@ export function UIProviders({ children, themeProps }: ProvidersProps) {
   const authenticate = useBoundStore((state) => state.authenticate);
   const { isFetchedAfterMount } = useQuery<any>({
     queryKey: ["me"],
-    onSuccess: () => {
-      authenticate();
-    },
+    // onSuccess: () => {
+    //   authenticate();
+    // },
   });
 
   return (

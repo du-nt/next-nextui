@@ -15,7 +15,23 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/", url));
   }
 
-  if (!isVerified && protectRoutes.includes(nextUrl.pathname)) {
+  if (protectRoutes.includes(nextUrl.pathname)) {
+    if (isVerified) {
+      return NextResponse.next();
+    }
+
+    const refreshResponse = await fetch(
+      "http://localhost:3000/api/token/refresh",
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
+
+    if (refreshResponse.ok) {
+      return NextResponse.next();
+    }
+
     const searchParams = new URLSearchParams(nextUrl.searchParams);
     searchParams.set("next", nextUrl.pathname);
 

@@ -2,6 +2,7 @@
 
 import useMutation from "@/hooks/useMutation";
 import { LoginFormSchema, LoginFormValues } from "@/schemas/login_form_schema";
+import { removeAllExceptKey } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DefaultError, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -33,7 +34,7 @@ export default function LoginPage() {
   });
 
   const onSubmit = (formValues: LoginFormValues) => {
-    // queryClient.resetQueries();
+    removeAllExceptKey(queryClient, ["me"]);
     mutate(formValues);
   };
 

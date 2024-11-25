@@ -21,7 +21,7 @@ const axiosInstance = axios.create({
 
 const refresh = async () => {
   try {
-    const response = await axios.post(`${apiDomain}token/refresh`);
+    const response = await axios.post(`${apiDomain}/token/refresh`);
 
     return response.data.data.accessToken;
   } catch (error) {

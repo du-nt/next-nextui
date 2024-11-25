@@ -3,14 +3,15 @@
 import useMutation from "@/hooks/useMutation";
 import useBoundStore from "@/stores";
 import { Button } from "@nextui-org/button";
-import { DefaultError } from "@tanstack/react-query";
+import { DefaultError, useQueryClient } from "@tanstack/react-query";
 
 export default function LogoutButton() {
   const unAuthenticate = useBoundStore((state) => state.unAuthenticate);
+  const queryClient = useQueryClient();
 
   const { mutate } = useMutation<null, DefaultError, null>({
     endpoint: "logout",
-    onSuccess: () => unAuthenticate(),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["me"] }),
   });
 
   const handleLogout = () => {

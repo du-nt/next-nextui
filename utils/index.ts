@@ -1,3 +1,4 @@
+import { QueryClient, QueryKey } from "@tanstack/react-query";
 import { JWTPayload, jwtVerify } from "jose";
 
 export function getJwtSecretKey(): Uint8Array {
@@ -21,3 +22,24 @@ export async function verifyJwtToken(
     return null;
   }
 }
+
+export const removeAllExceptKey = (
+  queryClient: QueryClient,
+  keyToKeep: QueryKey
+) => {
+  const queryCache = queryClient.getQueryCache();
+
+  const keysToRemove = queryCache
+    .getAll()
+    .reduce((keys: QueryKey[], { queryKey }) => {
+      if (JSON.stringify(queryKey) === JSON.stringify(keyToKeep)) {
+        return keys;
+      }
+
+      return [...keys, queryKey];
+    }, []);
+
+  if (keysToRemove.length > 0) {
+    queryClient.removeQueries({ queryKey: keysToRemove });
+  }
+};
